@@ -27,3 +27,12 @@ def translate(request: TranslationRequest):
 def html_to_markdown(request: TextRequest):
     result = conversion_service.convert_html_to_markdown(request.content)
     return {"result": result}
+
+
+@router.post("/sql/compress", response_model=TextResponse, tags=["Text Tools"])
+def sql_compress(request: TextRequest):
+    """
+    Accepts a formatted SQL query and returns it as a single, compressed line.
+    """
+    compressed_result = conversion_service.compress_sql(request.content)
+    return {"result": compressed_result}

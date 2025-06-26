@@ -2,6 +2,8 @@ import opencc
 import translators as ts
 from markdownify import markdownify as md
 import asyncio
+import sqlparse
+import re
 # 简繁转换
 # 修正后的代码
 s2t_converter = opencc.OpenCC('s2t')  # 简体到繁体
@@ -36,3 +38,25 @@ async def translate_text_async(text: str, target_lang: str) -> str:
 # HTML 转 Markdown
 def convert_html_to_markdown(html_content: str) -> str:
     return md(html_content)
+
+
+# ... (all your other service functions like translate_text_async, etc.)
+
+def compress_sql(sql_query: str) -> str:
+    """
+    Compresses a formatted SQL query into a single line.
+    - Strips comments.
+    - Replaces newlines and multiple spaces with a single space.
+    """
+    # Use sqlparse to safely strip comments and handle basic formatting.
+    # This is much more robust than simple string manipulation.
+    formatted_sql = sqlparse.format(sql_query, strip_comments=True)
+
+    # Replace newlines with a single space.
+    one_line_sql = formatted_sql.replace('\n', ' ')
+
+    # Use a regular expression to replace any sequence of multiple whitespace
+    # characters with a single space.
+    compressed_sql = re.sub(r'\s+', ' ', one_line_sql).strip()
+
+    return compressed_sql
