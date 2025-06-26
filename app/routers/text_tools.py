@@ -29,10 +29,12 @@ def html_to_markdown(request: TextRequest):
     return {"result": result}
 
 
-@router.post("/sql/compress", response_model=TextResponse, tags=["Text Tools"])
+# 这是要检查的代码块
+@router.post("/sql-compress", response_model=TextResponse) # 检查点1：装饰器拼写和括号
 def sql_compress(request: TextRequest):
     """
-    Accepts a formatted SQL query and returns it as a single, compressed line.
+    接收格式化的SQL查询，并将其作为压缩后的单行返回。
     """
     compressed_result = conversion_service.compress_sql(request.content)
     return {"result": compressed_result}
+
