@@ -5,3 +5,4 @@ translators
 pycryptodome
 markdownify
 httpx
+sqlparse
