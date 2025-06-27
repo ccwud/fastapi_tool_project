@@ -6,4 +6,3 @@ pycryptodome
 markdownify
 httpx
 sqlparse
-vanna[chromadb,openai,mysql]
