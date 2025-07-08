@@ -56,10 +56,10 @@ def main():
     print("\n[STEP 3/5] 正在连接到 MySQL 数据库...")
     try:
         vn.connect_to_mysql(
-            host='192.168.8.197',  # <--- 替换成你的数据库主机地址
-            user='root',  # <--- 替换成你的数据库用户名
-            password='123456',  # <--- 替换成你的数据库密码
-            dbname='sys',# <--- 替换成你的数据库名称
+            host='192.190',  # <--- 替换成你的数据库主机地址
+            user='1',  # <--- 替换成你的数据库用户名
+            password='1',  # <--- 替换成你的数据库密码
+            dbname='i',# <--- 替换成你的数据库名称
             port=3306
         )
         print("✅ 数据库连接成功！")
@@ -92,16 +92,18 @@ def main():
     print("✅ 模型训练完成！训练数据已保存在本地 ChromaDB 中。")
 
     # --- 7. 提问 ---
-    # 这一步和之前完全一样
     print("\n[STEP 5/5] 准备开始提问...")
 
     question = "Who are the top 3 customers with the highest total order amount?"
     print(f"\n> 你的问题: {question}")
 
-    df_result = vn.ask(question)
+    # 【终极解决方案】调用 ask 时明确禁用可视化功能，
+    # 这能确保它稳定地只返回一个 DataFrame。
+    df_result = vn.ask(question=question, visualize=False)
 
     print("\n查询结果 (DataFrame):")
-    if df_result is not None and not df_result.empty:
+    # 因为 df_result 现在可以确定是 DataFrame，所以这个检查是安全的。
+    if df_result is not None:
         print(df_result)
     else:
         print("未能获取查询结果或结果为空。")
