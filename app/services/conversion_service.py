@@ -23,16 +23,20 @@ async def translate_text_async(text: str, target_lang: str) -> str:
     loop = asyncio.get_running_loop()
     try:
         # 使用 run_in_executor 将阻塞的IO操作放入线程池执行
+        # 完整传递所有必要参数，包括from_language
         result = await loop.run_in_executor(
             None,  # 使用默认的线程池执行器
-            ts.translate_text, # 要执行的阻塞函数
-            text, # 传递给函数的参数
-            'bing', # translator 参数
-            target_lang # to_language 参数
+            lambda: ts.translate_text(
+                text,  # 要翻译的文本
+                translator='google',  # 使用更稳定的Google翻译
+                from_language='auto',  # 自动检测源语言
+                to_language=target_lang,  # 目标语言
+                timeout=10  # 设置超时时间
+            )
         )
         return result
     except Exception as e:
-        return f"Translation failed: {e}"
+        return f"翻译失败: {str(e)}"
 
 
 # HTML 转 Markdown

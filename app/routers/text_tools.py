@@ -18,8 +18,8 @@ def to_simplified(request: TextRequest):
 
 
 @router.post("/translate", response_model=TextResponse)
-def translate(request: TranslationRequest):
-    result = conversion_service.translate_text_async(request.content, request.target_lang)
+async def translate(request: TranslationRequest):
+    result = await conversion_service.translate_text_async(request.content, request.target_lang)
     return {"result": result}
 
 
@@ -37,4 +37,8 @@ def sql_compress(request: TextRequest):
     """
     compressed_result = conversion_service.compress_sql(request.content)
     return {"result": compressed_result}
+
+@router.get("/ok")
+def ok():
+    return {"result": "ok"}
 
