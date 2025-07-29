@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  fastapi-tool-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      # 开发模式下可以挂载代码目录实现热重载
+      # - ./app:/app/app
+      - /app/__pycache__
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  frontend:
+    image: cyangze/tool-suite-frontend:latest
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+
+  # 如果需要数据库，可以取消注释以下部分
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: fastapi_db
+  #     POSTGRES_USER: fastapi_user
+  #     POSTGRES_PASSWORD: fastapi_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+
+# volumes:
+#   postgres_data:
+
+networks:
+  default:
+    name: fastapi-tool-network
